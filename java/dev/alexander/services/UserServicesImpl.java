@@ -21,7 +21,7 @@ public class UserServicesImpl implements UserServices {
 	//Will take the returned User object and compare the password the user applied.
 	public User login(String username, String password) {
 		
-		User compare = users.getUserByName(username);
+		User compare = getUserByName(username);
 
 		if (compare == null) {
 
@@ -37,11 +37,11 @@ public class UserServicesImpl implements UserServices {
 
 		return users.getAllUsers();
 	}
-
+	//Will display all users....
 	public void printAllUsers(List<User> table) {
 		System.out.println("_____________________________________________________________________");
 		if (table == null) {
-			System.out.println("No Accounts");
+			System.out.println("No Users");
 			return;
 		} else {
 			for (User user : table) {
@@ -52,20 +52,20 @@ public class UserServicesImpl implements UserServices {
 			}
 		}
 	}
-
+	//Will acquire user based on the username...
 	public User getUserByName(String username) {
 		return users.getUserByName(username);
 	}
-
+	//Will acquire user based on the password...
 	public User getUserById(int userId) {
 		return getUserById(userId);
 	}
-	
+	//Will update user account using all fields of the 'updateUser' object...
 	public User updateUserById(User updatedUser) 
 	{
 		return users.updateUserStatus(updatedUser);
 	}
-
+	//Returns booleans
 	public boolean deleteUser(User user) {
 		users.deleteUser(user.getUserId());
 		return false;

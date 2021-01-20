@@ -9,7 +9,7 @@ public interface AccountDAO {
 	
 	boolean createAccount(String givenName, int userId, int balance);
 	Account updateAccountAmount(Account account);
-	Account getAccountById(int acctId);
+	Account getAccountById(int acctId,int user_id);
 	Boolean deleteAccount(int acctId);
 	public List<Account> getAllAccountsById(int usrId);
 	

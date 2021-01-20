@@ -19,7 +19,6 @@ public class AccountDAOImpl implements AccountDAO {
 	public boolean createAccount(String givenName, int userId, int balance) {
 		try {
 			String sql = "CALL add_account(?,?,?)";
-			System.out.println(conn);
 			CallableStatement cs = conn.prepareCall(sql);
 			cs.setString(1,givenName);
 			cs.setString(2,Integer.toString(userId));
@@ -36,7 +35,7 @@ public class AccountDAOImpl implements AccountDAO {
 	}
 
 	public Account updateAccountAmount(Account account) {
-		// TODO Auto-generated method stub
+		
 		try {
 			String sql = "Call update_account_amount(?,?)";
 			CallableStatement cs = conn.prepareCall(sql);
@@ -78,18 +77,17 @@ public class AccountDAOImpl implements AccountDAO {
 		return null;
 	}
 
-	public Account getAccountById(int acctId) {
-		// TODO Auto-generated method stub
+	public Account getAccountById(int acctId, int user_id) {
+		
 		try {
-			String sql = "SELECT * FROM account WHERE account_id = ?";
+			String sql = "SELECT * FROM account WHERE account_id = ? AND owner_id = ?";
 			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setString(1,Integer.toString(acctId));
-			
+			ps.setString(2,Integer.toString(user_id));
 			ResultSet rs = ps.executeQuery();
 			
 			if(rs.next()){
 			Account holder = new Account();
-			System.out.println(rs.getInt("ACCOUNT_ID"));
 			holder.setAccount_id(rs.getInt("ACCOUNT_ID"));
 			holder.setUser_id(rs.getInt("OWNER_ID"));
 			holder.setAccount_name(rs.getString("NAME"));
@@ -103,7 +101,7 @@ public class AccountDAOImpl implements AccountDAO {
 	}
 
 	public Boolean deleteAccount(int acctId) {
-		// TODO Auto-generated method stub
+		
 		try {
 			String sql = "Call delete_account(?)";
 			CallableStatement cs = conn.prepareCall(sql);

@@ -24,13 +24,12 @@ public class app {
 
 	}
 
-	// ----------------------------- Menus for the application
-	// ---------------------------
+	// -------------------------------- Menus for the application ---------------------------
 	public static void frontPage() {
 		System.out.println("-----------------Welcome to the Revature Project 0 Banking Application-----------------");
 
 		while (true) {
-			System.out.println("	Please enter a number to select from our list of options and press 'ENTER' ");
+			System.out.println("Please enter a number to select from our list of options and press 'ENTER' ");
 			System.out.println("1. Log in");
 			System.out.println("2. Register");
 			System.out.println("3. Exit");
@@ -69,8 +68,7 @@ public class app {
 		}
 	}
 
-	// Will Find all accounts associated with a logged in user.....CAN ONLY BE
-	// ACCESSED IF THE PERSON IS LOGGED IN**
+	// Will Find all accounts associated with a logged in user
 	private static void firstScreen() {
 		while (true) {
 			System.out.println(
@@ -86,27 +84,24 @@ public class app {
 				switch (optionConvert) {
 
 				case 1: {
-					// viewAllAccountsByID
 					current_user_account_table = act_controls.getAccountTable(current_logged_user.getUserId());
 					act_controls.printAllAccountsForUser(current_user_account_table);
 					continue;
 				}
 				case 2: {
-					// actControls.appendAccount(current_logged_user.getUserId());
 					handleNewAccount();
+					
 					continue;
 				}
 				case 3: {
-					// actControls.SelectAccount();
 					System.out.println("Please the enter the account number for the account you wish to view");
 
 					try {
 						int choice = input.nextInt();
-						Account selected_account = act_controls.getAccountById(choice);
+						Account selected_account = act_controls.getAccountById(choice,current_logged_user.getUserId());
 
 						if (selected_account == null) {
 							System.out.println("Not a valid account! Please choose from one of the accounts listed.");
-							// actControls.printAccountsByUserId();
 							continue;
 						} else {
 							accountScreen(selected_account);
@@ -136,9 +131,7 @@ public class app {
 
 		}
 	}
-
-	// Hybrid of first screen featuring the additional commands for the super
-	// user....
+	// Hybrid of first screen featuring the additional commands for the superUser
 	private static void superScreen() {
 		while (true) {
 			System.out.println("Welcome administrator! Please enter a number to select from our list of options and press 'ENTER' ");
@@ -191,7 +184,6 @@ public class app {
 		}
 
 	}
-
 	// Screen for manipulating an account once selected...
 	private static void accountScreen(Account selected_account) {
 		while (true) {
@@ -201,7 +193,7 @@ public class app {
 			System.out.println("_____________________________________________________________________________________");
 			System.out.println("");
 			System.out.println("");
-			System.out.println("	Please enter a number to select from our list of options and press 'ENTER' ");
+			System.out.println("Please enter a number to select from our list of options and press 'ENTER' ");
 			System.out.println("1. Deposit ");
 			System.out.println("2. Withdraw");
 			System.out.println("3. Delete an account.");
@@ -216,12 +208,14 @@ public class app {
 					// deposit
 					selected_account = act_controls.depositAction(current_logged_user.getUserId(),
 							selected_account.getAccount_id());
+					System.out.println("Transaction Complete!");
 					continue;
 				}
 				case 2: {
 					// withdraw
 					selected_account = act_controls.withdrawAction(current_logged_user.getUserId(),
 							selected_account.getAccount_id());
+					System.out.println("Transaction complete!");
 					continue;
 				}
 				case 3: {
@@ -255,8 +249,70 @@ public class app {
 		}
 
 	}
+	//Menu displaying a selected user and options on what to do to that user.
+	private static void userScreen(User selectedUser) {
+		while (true) {
+			System.out.println("_____________________________________________________________________________________");
+			System.out.println("|Id: " + selectedUser.getUserId() + "  |Username: "
+					+ selectedUser.getUsername() + "  | Password: " + selectedUser.getPassword());
+			System.out.println("_____________________________________________________________________________________");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("Please enter a number to select from our list of options and press 'ENTER' ");
+			System.out.println("1. Change Username");
+			System.out.println("2. Change Password ");
+			System.out.println("3. Delete Account");
+			System.out.println("4. Back to main menu");
 
-	// 
+			try {
+				int optionConvert = input.nextInt();
+
+				switch (optionConvert) {
+
+				case 1: {
+					System.out.println("Enter the new Name you wish to be associate with this User");
+					String username = input.next();
+					selectedUser.setUsername(username); 
+					controls.updateUserById(selectedUser);
+					continue;
+					
+				}
+				case 2: {
+					System.out.println("Enter the new Password you wish to be associate with this User");
+					String password = input.next();
+					selectedUser.setPassword(password); 
+					controls.updateUserById(selectedUser);
+					continue;
+				}
+				case 3: {
+					controls.deleteUser(selectedUser);
+					System.out.println("User has been erased!");
+					return;
+					
+				}
+
+				case 4: {
+					// exit
+					System.out.println("Returning!");
+					return;
+				}
+				default: {
+					System.out.println("Please enter a valid response between the numbers listed.");
+				}
+
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("Invalid Character!!! Please input a valid option");
+				input.nextLine();
+			}
+
+		}
+
+	}
+
+	
+	//-----------------------------Methods to handle User input before calling services-------------------------
+	// Calls the service to add a User to the table after getting the appropriate information from the user..
 	private static void handleLogin() {
 
 		System.out.println("Please enter a Username");
@@ -272,11 +328,9 @@ public class app {
 		} else if (current_logged_user.getSuperUser().equals("Y")) {
 			superScreen();
 		} else {
-			System.out.println(current_logged_user.getSuperUser());
 			firstScreen();
 		}
 	}
-
 	// Calls the service for register passing the appropriate fields
 	private static void register() {
 		while (true) {
@@ -310,11 +364,13 @@ public class app {
 
 				case 1: {
 					act_controls.appendAccount("Checking", current_logged_user.getUserId(), 0);
+					System.out.println("Checking Created!");
 					return;
 				}
 
 				case 2: {
 					act_controls.appendAccount("Savings", current_logged_user.getUserId(), 0);
+					System.out.println("Savings Created!");
 					return;
 				}
 				}
@@ -326,65 +382,4 @@ public class app {
 		}
 
 	}
-	//Menu for selected users.
-	private static void userScreen(User selectedUser) {
-		while (true) {
-			System.out.println("_____________________________________________________________________________________");
-			System.out.println("|Id: " + selectedUser.getUserId() + "  |Username: "
-					+ selectedUser.getUsername() + "  | Password: " + selectedUser.getPassword());
-			System.out.println("_____________________________________________________________________________________");
-			System.out.println("");
-			System.out.println("");
-			System.out.println("	Please enter a number to select from our list of options and press 'ENTER' ");
-			System.out.println("1. Change Username");
-			System.out.println("2. Change Password ");
-			System.out.println("3. Delete Account");
-			System.out.println("4. Back to main menu");
-
-			try {
-				int optionConvert = input.nextInt();
-
-				switch (optionConvert) {
-
-				case 1: {
-					System.out.println("Enter the new Name you wish to be associate with this User");
-					String username = input.next();
-					selectedUser.setUsername(username); 
-					controls.updateUserById(selectedUser);
-					continue;
-					
-				}
-				case 2: {
-					System.out.println("Enter the new Password you wish to be associate with this User");
-					String password = input.next();
-					selectedUser.setPassword(password); 
-					controls.updateUserById(selectedUser);
-					continue;
-				}
-				case 3: {
-					controls.deleteUser(selectedUser);
-					return;
-					
-				}
-
-				case 4: {
-					// exit
-					System.out.println("Returning!");
-					return;
-				}
-				default: {
-					System.out.println("Please enter a valid response between the numbers listed.");
-				}
-
-				}
-			} catch (InputMismatchException e) {
-				System.out.println("Invalid Character!!! Please input a valid option");
-				input.nextLine();
-			}
-
-		}
-
-	}
-	
-	
 }

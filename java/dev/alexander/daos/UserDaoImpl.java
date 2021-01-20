@@ -19,7 +19,8 @@ import util.JDBCConnection;
 //light implementation to be modeled to SQL DB later.....
 public class UserDaoImpl implements UserDAO {
 	public static Connection conn = JDBCConnection.getConnection();
-
+	
+	//Returns true if a User was successfully registered....
 	public Boolean Register(User newUser) {
 		
 		try {
@@ -34,7 +35,7 @@ public class UserDaoImpl implements UserDAO {
 		}
 		return false;
 	}
-
+	//Returns a User or NULL depending on if the account was found in the DB by Id....
 	public User getUserById(int Id) {
 		
 		try {
@@ -57,7 +58,7 @@ public class UserDaoImpl implements UserDAO {
 		}
 		return null;
 	}
-
+	//Returns a User or NULL depending on if the account was found in the DB by Name.... 
 	public User getUserByName(String username) {
 		//User finder = user_table.get(username);
 		try {
@@ -86,7 +87,7 @@ public class UserDaoImpl implements UserDAO {
 		}
 		return null;
 	}
-
+	//Returns a list object containing all Users and Will return NULL if there are no users....
 	public List<User> getAllUsers() {
 		
 		List<User> aggregate_table = new ArrayList<User>();
@@ -114,7 +115,7 @@ public class UserDaoImpl implements UserDAO {
 		 
 		return null;
 	}
-
+	//Will send an UPDATE callable statement to the DB passing all values contained in the user object provided.
 	public User updateUserStatus(User user) {
 		
 		try {
@@ -136,7 +137,7 @@ public class UserDaoImpl implements UserDAO {
 		return null;
 		
 	}
-
+	//Will return true to indicate a user has been deleted from the table...
 	public boolean deleteUser(int id) {
 		
 		try {

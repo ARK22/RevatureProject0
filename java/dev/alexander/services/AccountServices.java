@@ -9,7 +9,7 @@ public interface AccountServices {
 	Account withdrawAction(int user_id, int account_id);
 	Account depositAction(int user_id, int account_id);
 	boolean deleteAccountById(int account_id);
-	Account getAccountById(int account_id);
+	Account getAccountById(int account_id, int user_id);
 	Boolean appendAccount(String name,int user_id,int amount);
 	public List<Account> getAccountTable(int user_id);
 	public void printAllAccountsForUser(List<Account> table);
